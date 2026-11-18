@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOXEL SANDBOX 2D // PROCEDURAL ENGINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-badge">SIM-v2</div>
+      <span class="brand-title">VOXEL SANDBOX 2D</span>
+      <span class="brand-sub">PROCEDURAL BIOMES & FLUID DYNAMICS</span>
+    </div>
+    <div class="metrics-bar">
+      <div class="metric-item">
+        <span class="label">SEED</span>
+        <span class="value font-mono text-emerald" id="metricSeed">481516</span>
+      </div>
+      <div class="metric-item">
+        <span class="label">COORDS</span>
+        <span class="value font-mono" id="metricCoords">X: 80 | Y: 25</span>
+      </div>
+      <div class="metric-item">
+        <span class="label">TIME</span>
+        <span class="value font-mono" id="metricTime">12:00 NOON</span>
+      </div>
+      <div class="metric-item">
+        <span class="label">PORT</span>
+        <span class="value font-mono">8012</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main class="workspace">
+    <!-- Left Tools & World Manager Panel -->
+    <aside class="panel side-panel">
+      <div class="panel-header">
+        <span class="panel-title">TELEMETRY & CRAFTING</span>
+        <span class="panel-tag" id="biomeTag">TEMPERATE FOREST</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-row">
+        <button class="btn btn-emerald" id="btnSaveWorld">SAVE WORLD (SQLITE)</button>
+        <button class="btn" id="btnWorldsList">WORLDS LIST</button>
+      </div>
+      <div class="save-indicator font-mono text-xs" id="saveIndicator">World synced with SQLite</div>
+
+      <!-- Crafting Station -->
+      <div class="crafting-card">
+        <div class="card-title">FIELD CRAFTING WORKBENCH</div>
+        <div class="recipes-list" id="recipesList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- World Stats -->
+      <div class="stats-group">
+        <div class="card-title">ENVIRONMENT DIAGNOSTICS</div>
+        <div class="stat-row">
+          <span>Active Chunk</span>
+          <span class="font-mono text-emerald">160x90 Voxels</span>
+        </div>
+        <div class="stat-row">
+          <span>Fluid Physics</span>
+          <span class="font-mono">Cellular Automata (Active)</span>
+        </div>
+        <div class="stat-row">
+          <span>Granular Physics</span>
+          <span class="font-mono">Falling Sand Vector</span>
+        </div>
+        <div class="stat-row">
+          <span>Lighting Level</span>
+          <span class="font-mono" id="lightLevelText">100% Daylight</span>
+        </div>
+        <div class="stat-row">
+          <span>Active Tool</span>
+          <span class="font-mono text-emerald" id="activeToolText">Pickaxe (Wood)</span>
+        </div>
+      </div>
+
+      <!-- Keybindings -->
+      <div class="controls-card">
+        <div class="card-title">INPUT SCHEMA</div>
+        <div class="ctrl-line"><kbd>A</kbd><kbd>D</kbd><span>Horizontal Strides</span></div>
+        <div class="ctrl-line"><kbd>W</kbd> / <kbd>SPACE</kbd><span>Vector Jump</span></div>
+        <div class="ctrl-line"><kbd>L-CLICK</kbd><span>Break / Mine Voxel</span></div>
+        <div class="ctrl-line"><kbd>R-CLICK</kbd><span>Place Selected Block</span></div>
+        <div class="ctrl-line"><kbd>1</kbd>–<kbd>9</kbd><span>Select Hotbar Slot</span></div>
+      </div>
+    </aside>
+
+    <!-- Center Canvas Viewport -->
+    <section class="viewport-container">
+      <canvas id="sandboxCanvas" width="960" height="640"></canvas>
+
+      <!-- Hotbar HUD overlay -->
+      <div class="hotbar-container" id="hotbarContainer">
+        <!-- 9 hotbar slots -->
+      </div>
+
+      <!-- Dialog: Worlds Manager Modal -->
+      <div class="overlay hidden" id="worldsModal">
+        <div class="modal-card">
+          <div class="modal-badge">DATABASE PERSISTENCE</div>
+          <h2 class="modal-title">SAVED WORLDS ARCHIVE</h2>
+          <div class="new-world-form">
+            <input type="text" id="newWorldName" placeholder="New World Name..." class="cyber-input">
+            <input type="number" id="newWorldSeed" placeholder="Seed (optional)" class="cyber-input font-mono">
+            <button class="btn btn-emerald" id="btnCreateWorld">GENERATE NEW WORLD</button>
+          </div>
+          <div class="worlds-table-wrap">
+            <table class="worlds-table">
+              <thead>
+                <tr>
+                  <th>NAME</th>
+                  <th>SEED</th>
+                  <th>UPDATED</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="worldsTableBody">
+                <!-- Populated via GET /api/worlds -->
+              </tbody>
+            </table>
+          </div>
+          <button class="btn mt-12" id="btnCloseWorldsModal">CLOSE [ESC]</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/sandbox.js"></script>
+</body>
+</html>
